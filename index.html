@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma de Treinamento - 28 Dias | Claro & FiberHome (HFC & GPON)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para gráficos interativos estilo Power BI -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonte Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        claro: {
+                            red: '#DA291C',
+                            darkRed: '#A61910',
+                            navy: '#1B2A4A',
+                            orange: '#F37021',
+                            purple: '#662D91',
+                            teal: '#008C95',
+                            magenta: '#C8102E',
+                            gpon: '#0066B3'
+                        },
+                        fiberhome: {
+                            blue: '#004B93',
+                            darkBlue: '#003366',
+                            accent: '#F37021'
+                        },
+                        bi: {
+                            canvas: '#0B1120',
+                            card: '#111827',
+                            cardAlt: '#1E293B',
+                            border: '#273549'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.18s ease-out forwards;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-[#0B1120] text-slate-100 font-sans antialiased selection:bg-[#DA291C] selection:text-white min-h-screen flex flex-col">
+
+    <!-- CONTAINER DE NOTIFICAÇÕES (TOAST) -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-[110] flex flex-col gap-2 pointer-events-none max-w-sm"></div>
+
+    <!-- CABEÇALHO CORPORATIVO EXECUTIVO (CLARO + FIBERHOME) -->
+    <header class="bg-gradient-to-r from-[#8F1109] via-[#DA291C] to-[#111827] text-white shadow-xl border-b border-white/10 sticky top-0 z-30">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                <!-- Identidade Institucional e Título -->
+                <div class="flex items-start sm:items-center gap-3 sm:gap-4">
+                    <div class="flex items-center gap-2 shrink-0">
+                        <!-- Marca Claro -->
+                        <div class="bg-white text-[#DA291C] font-extrabold text-xl sm:text-2xl px-3.5 py-2 rounded-xl shadow-md tracking-tight flex items-center gap-1 select-none">
+                            <span>Claro</span>
+                            <i class="fa-solid fa-wifi text-xs align-top text-[#DA291C]"></i>
+                        </div>
+                        <!-- Logo / Marca FiberHome -->
+                        <div class="bg-white px-3 py-1.5 rounded-xl shadow-md border border-slate-200/80 flex flex-col justify-center select-none" title="Parceria Técnica FiberHome">
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-5 h-5 shrink-0" viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo FiberHome">
+                                    <path d="M3 25C10 13 21 7 33 5C25 11 16 18 11 27L3 25Z" fill="#004B93"/>
+                                    <path d="M12 28C18 19 25 14 34 12C27 17 21 23 18 29L12 28Z" fill="#F37021"/>
+                                </svg>
+                                <span class="font-extrabold italic tracking-tight text-sm sm:text-base text-[#004B93] leading-none">
+                                    FiberHome
+                                </span>
+                            </div>
+                            <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 text-right leading-none mt-0.5">
+                                Telecom
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h1 class="text-lg sm:text-xl lg:text-2xl font-extrabold tracking-tight text-white">
+                                Cronograma de Treinamento - 28 Dias
+                            </h1>
+                            <span class="bg-black/35 text-red-100 text-xs font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+                                HFC & GPON • POWER BI VIEW
+                            </span>
+                            <span id="syncModeBadge" class="bg-emerald-500/20 text-emerald-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-400/30">
+                                <i class="fa-solid fa-database mr-1"></i>Local + Firebase Ready
+                            </span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-red-100/95 mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <span class="font-medium">Juntos pelo seu desenvolvimento!</span>
+                            <span class="hidden sm:inline">•</span>
+                            <span><i class="fa-regular fa-calendar-check mr-1"></i>Segunda a sexta em sala</span>
+                            <span class="hidden sm:inline">|</span>
+                            <span><i class="fa-solid fa-user-group mr-1"></i>Sábados: saída em dupla com técnico experiente</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+                    <button type="button" onclick="openFormModal()" class="bg-white text-[#DA291C] hover:bg-red-50 font-bold text-xs sm:text-sm px-3.5 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>+ Novo Técnico</span>
+                    </button>
+
+                    <label class="bg-[#004B93] hover:bg-[#003366] text-white font-semibold text-xs sm:text-sm px-3.5 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer border border-white/15">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span>Importar CSV</span>
+                        <input type="file" id="csvFileInput" accept=".csv,text/csv" class="hidden" onchange="handleCSVImport(event)">
+                    </label>
+
+                    <!-- Menu de Exportação de Planilha -->
+                    <div class="relative inline-block">
+                        <button type="button" onclick="toggleExportMenu()" id="exportDropdownBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-3.5 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-file-excel"></i>
+                            <span>Exportar Planilha</span>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="exportMenu" class="hidden absolute right-0 mt-2 w-64 bg-[#111827] rounded-xl shadow-2xl border border-[#273549] py-1.5 z-40 text-slate-200">
+                            <button type="button" onclick="exportToCSV()" class="w-full text-left px-4 py-2.5 text-xs sm:text-sm hover:bg-slate-800 flex items-center gap-2.5 font-medium cursor-pointer">
+                                <i class="fa-solid fa-file-csv text-emerald-400 text-base"></i>
+                                <div>
+                                    <div class="font-semibold text-white">Exportar CSV (Excel)</div>
+                                    <div class="text-[11px] text-slate-400">Todos os módulos em colunas</div>
+                                </div>
+                            </button>
+                            <button type="button" onclick="exportToXLS()" class="w-full text-left px-4 py-2.5 text-xs sm:text-sm hover:bg-slate-800 flex items-center gap-2.5 font-medium border-t border-slate-800 cursor-pointer">
+                                <i class="fa-solid fa-table text-sky-400 text-base"></i>
+                                <div>
+                                    <div class="font-semibold text-white">Exportar Planilha (.xls)</div>
+                                    <div class="text-[11px] text-slate-400">Tabela colorida por status</div>
+                                </div>
+                            </button>
+                            <button type="button" onclick="exportTemplateCSV()" class="w-full text-left px-4 py-2.5 text-xs sm:text-sm hover:bg-slate-800 flex items-center gap-2.5 font-medium border-t border-slate-800 cursor-pointer">
+                                <i class="fa-solid fa-file-arrow-down text-amber-400 text-base"></i>
+                                <div>
+                                    <div class="font-semibold text-white">Modelo em Branco (.csv)</div>
+                                    <div class="text-[11px] text-slate-400">Cabeçalhos oficiais de 28 dias</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botão Zerar Protegido por Código Gemini007 -->
+                    <button type="button" onclick="openResetSecurityModal()" class="bg-black/40 hover:bg-[#DA291C] text-white font-bold text-xs sm:text-sm px-3.5 py-2.5 rounded-xl transition flex items-center gap-1.5 border border-white/20 cursor-pointer" title="Zerar base de dados (requer código de segurança Gemini007)">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Zerar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-1">
+
+        <!-- MAPA VISUAL DAS ETAPAS DO CRONOGRAMA (28 DIAS) -->
+        <section class="bg-[#111827] rounded-2xl shadow-lg border border-[#273549] p-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#DA291C]"></span>
+                    <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200">
+                        Trilha Oficial de Módulos (28 Dias • Clique para filtrar técnicos com atividade no módulo)
+                    </h2>
+                </div>
+                <span class="text-xs text-slate-400 font-medium">8 Etapas/Módulos Individuais por Técnico</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5" id="stagesQuickCards"></div>
+        </section>
+
+        <!-- BARRA DE FILTROS (TURMA, MÓDULO, STATUS GERAL E BUSCA) -->
+        <section class="bg-[#111827] rounded-2xl shadow-lg border border-[#273549] p-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+                <div>
+                    <label for="filterTurma" class="block text-xs font-bold text-slate-300 uppercase mb-1">
+                        <i class="fa-solid fa-users-rectangle text-[#DA291C] mr-1"></i> Turma / Observação
+                    </label>
+                    <select id="filterTurma" onchange="applyFilters()" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm font-medium text-slate-100 focus:border-[#DA291C] focus:outline-none">
+                        <option value="TODAS">Todas as Turmas</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="filterModulo" class="block text-xs font-bold text-slate-300 uppercase mb-1">
+                        <i class="fa-solid fa-layer-group text-sky-400 mr-1"></i> Módulo / Etapa
+                    </label>
+                    <select id="filterModulo" onchange="applyFilters()" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm font-medium text-slate-100 focus:border-[#DA291C] focus:outline-none">
+                        <option value="TODOS">Todos os Módulos</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="filterStatus" class="block text-xs font-bold text-slate-300 uppercase mb-1">
+                        <i class="fa-solid fa-filter text-teal-400 mr-1"></i> Situação Geral
+                    </label>
+                    <select id="filterStatus" onchange="applyFilters()" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm font-medium text-slate-100 focus:border-[#DA291C] focus:outline-none">
+                        <option value="TODOS">Todas as Situações</option>
+                        <option value="Concluído (8/8)">Concluído (8/8)</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Atenção / Refazer">Atenção / Refazer</option>
+                        <option value="Não Iniciado">Não Iniciado</option>
+                    </select>
+                </div>
+
+                <div class="sm:col-span-2 lg:col-span-2 flex gap-2">
+                    <div class="flex-1">
+                        <label for="filterSearch" class="block text-xs font-bold text-slate-300 uppercase mb-1">
+                            <i class="fa-solid fa-magnifying-glass text-slate-400 mr-1"></i> Buscar Técnico ou Matrícula
+                        </label>
+                        <input type="text" id="filterSearch" onkeyup="applyFilters()" placeholder="Digite nome, matrícula ou turma..." class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-[#DA291C] focus:outline-none">
+                    </div>
+                    <button type="button" onclick="clearFilters()" class="self-end px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold border border-[#273549] transition cursor-pointer" title="Limpar filtros">
+                        <i class="fa-solid fa-eraser"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 KPI CARDS (ESTILO POWER BI) -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <!-- KPI 1: Total de Técnicos -->
+            <div class="bg-[#111827] rounded-2xl shadow-lg border border-[#273549] border-t-4 border-t-sky-400 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total de Técnicos</span>
+                        <div class="w-9 h-9 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center">
+                            <i class="fa-solid fa-helmet-safety text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="kpiTotalTecnicos" class="text-3xl font-extrabold text-white">0</span>
+                        <span id="kpiTurmasCount" class="text-xs font-semibold text-slate-400">em 0 turmas</span>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2.5 border-t border-[#273549] flex items-center justify-between text-[11px] text-slate-400">
+                    <span>Trilha: <strong class="text-slate-200">8 módulos/etapas</strong></span>
+                    <span id="kpiTrilhaCompleta" class="font-bold text-emerald-400">0 trilhas 100%</span>
+                </div>
+            </div>
+
+            <!-- KPI 2: Progresso Médio de Módulos -->
+            <div class="bg-[#111827] rounded-2xl shadow-lg border border-[#273549] border-t-4 border-t-teal-400 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Módulos Aprovados (Média)</span>
+                        <div class="w-9 h-9 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center">
+                            <i class="fa-solid fa-award text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="kpiProgressoMedio" class="text-3xl font-extrabold text-teal-400">0%</span>
+                        <span id="kpiModulosAprovadosTotal" class="text-xs font-semibold text-slate-400">(0 aprov.)</span>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2.5 border-t border-[#273549]">
+                    <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                        <div id="kpiProgressoBar" class="bg-teal-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-slate-400 mt-1.5">
+                        <span>Média: <strong id="kpiMediaModulos" class="text-slate-200">0.0/8</strong></span>
+                        <span id="kpiSabadoCount">Sábados dupla: 0/0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI 3: Horas Práticas Acumuladas -->
+            <div class="bg-[#111827] rounded-2xl shadow-lg border border-[#273549] border-t-4 border-t-amber-400 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Horas Práticas Realizadas</span>
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                            <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="kpiHorasPraticas" class="text-3xl font-extrabold text-amber-400">0.0h</span>
+                        <span id="kpiTotalCiclos" class="text-xs font-semibold text-slate-400">(0 ciclos de 1h30)</span>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2.5 border-t border-[#273549] flex items-center justify-between text-[11px] text-slate-400">
+                    <span>Janela prática: <strong class="text-slate-200">7 dias / 35h</strong></span>
+                    <span id="kpiMediaCiclos" class="font-bold text-amber-300">0.0x / técnico</span>
+                </div>
+            </div>
+
+            <!-- KPI 4: Capacidade Estimada por Bancada -->
+            <div class="bg-[#111827] rounded-2xl shadow-lg border border-[#273549] border-t-4 border-t-[#DA291C] p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Ciclos por Técnico (35h)</span>
+                        <div class="w-9 h-9 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center">
+                            <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex items-baseline gap-2">
+                        <span id="kpiSimAluno" class="text-3xl font-extrabold text-red-400">0.0x</span>
+                        <span class="text-xs font-semibold text-slate-400">ciclos de 1h30min</span>
+                    </div>
+                </div>
+                <div id="kpiSimResumo" class="mt-3 pt-2.5 border-t border-[#273549] text-[11px] text-slate-400 truncate">
+                    Configure bancadas, técnicos e dias no simulador
+                </div>
+            </div>
+        </section>
+
+        <!-- GRÁFICOS INTERATIVOS (CHART.JS) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Gráfico 1: Desempenho por Módulo Individual -->
+            <div class="lg:col-span-8 bg-[#111827] rounded-2xl shadow-lg border border-[#273549] p-5 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-white">Status por Módulo Individual (Aprovados vs. Em Andamento / Refazer)</h3>
+                        <p class="text-xs text-slate-400">Cada técnico conta de forma independente em todos os módulos onde possui registro</p>
+                    </div>
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-[#273549] self-start">
+                        Histórico Preservado
+                    </span>
+                </div>
+                <div class="relative flex-1 min-h-[280px] w-full">
+                    <canvas id="stagesBarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico 2: Situação Geral das Trilhas -->
+            <div class="lg:col-span-4 bg-[#111827] rounded-2xl shadow-lg border border-[#273549] p-5 flex flex-col">
+                <div class="mb-4">
+                    <h3 class="text-base font-bold text-white">Evolução Geral dos Técnicos</h3>
+                    <p class="text-xs text-slate-400">Classificação pelo número de módulos aprovados (0 a 8)</p>
+                </div>
+                <div class="relative flex-1 min-h-[220px] flex items-center justify-center">
+                    <canvas id="statusDonutChart"></canvas>
+                </div>
+                <div id="statusLegendCustom" class="mt-4 pt-3 border-t border-[#273549] space-y-1.5 text-xs"></div>
+            </div>
+        </section>
+
+        <!-- SIMULADOR DE CAPACIDADE DE BANCADAS + GRÁFICO DE HORAS PRÁTICAS POR TURMA -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Simulador de Capacidade de Bancadas (35h / Ciclos de 1h30min / Bancadas / Técnicos / Dias) -->
+            <div class="lg:col-span-6 bg-[#111827] rounded-2xl shadow-lg border border-[#273549] border-t-4 border-t-[#DA291C] p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-[#DA291C] text-white flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-solid fa-sliders text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-white">Simulador de Capacidade de Bancadas</h3>
+                                <p class="text-xs text-slate-400">
+                                    Base padrão: <strong class="text-slate-200">35h práticas (7 dias)</strong> • Ciclo: <strong class="text-slate-200">1h30min (90 min)</strong>
+                                </p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="syncSimTechsWithTable()" class="text-[11px] font-bold text-sky-400 hover:text-sky-300 bg-sky-500/10 border border-sky-500/30 px-2.5 py-1 rounded-lg cursor-pointer shrink-0">
+                            Usar técnicos filtrados
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                        <div class="bg-[#0B1120] p-3 rounded-xl border border-[#273549]">
+                            <label for="simBancadas" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">
+                                Bancadas / Kits
+                            </label>
+                            <input type="number" id="simBancadas" value="1" min="1" max="100" oninput="updateBenchSimulator()" class="w-full rounded-lg border border-[#273549] bg-[#111827] px-2.5 py-1.5 text-base font-extrabold text-sky-400 focus:border-sky-400 focus:outline-none">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Estações ativas</span>
+                        </div>
+
+                        <div class="bg-[#0B1120] p-3 rounded-xl border border-[#273549]">
+                            <label for="simAlunos" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">
+                                Técnicos na Turma
+                            </label>
+                            <input type="number" id="simAlunos" value="0" min="0" max="300" oninput="updateBenchSimulator()" class="w-full rounded-lg border border-[#273549] bg-[#111827] px-2.5 py-1.5 text-base font-extrabold text-white focus:border-[#DA291C] focus:outline-none">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Alunos em formação</span>
+                        </div>
+
+                        <div class="bg-[#0B1120] p-3 rounded-xl border border-[#273549]">
+                            <label for="simDias" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">
+                                Dias Práticos (5h/dia)
+                            </label>
+                            <input type="number" id="simDias" value="7" min="1" max="28" oninput="updateBenchSimulator()" class="w-full rounded-lg border border-[#273549] bg-[#111827] px-2.5 py-1.5 text-base font-extrabold text-amber-400 focus:border-amber-400 focus:outline-none">
+                            <span id="simHorasJanelaLabel" class="text-[10px] text-slate-500 mt-1 block">Janela: 35,0h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#0B1120] border border-[#273549] text-white rounded-xl p-4 space-y-2.5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <span class="text-slate-400">Capacidade total de ciclos (1h30min):</span>
+                        <span id="simTotalCiclos" class="font-bold text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2.5 py-0.5 rounded">23 ciclos (34,5h)</span>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <span class="text-slate-400">Ocupação estimada das bancadas:</span>
+                        <span id="simOcupacaoBadge" class="font-bold text-amber-300">0% de ocupação</span>
+                    </div>
+                    <div class="pt-2.5 border-t border-[#273549] flex items-center justify-between gap-3">
+                        <div>
+                            <div class="text-xs text-slate-400">Ciclos completos por técnico:</div>
+                            <div id="simAlertaTexto" class="text-xs text-slate-300 font-medium mt-0.5">
+                                Informe a quantidade de técnicos para calcular
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span id="simResultadoAluno" class="text-3xl font-extrabold text-white">0.0x</span>
+                            <span class="block text-[10px] text-slate-400">ciclos de 90 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico 3: Horas Práticas Acumuladas por Turma -->
+            <div class="lg:col-span-6 bg-[#111827] rounded-2xl shadow-lg border border-[#273549] p-5 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-white">Horas Práticas Realizadas por Turma</h3>
+                        <p class="text-xs text-slate-400">Total de horas (ciclos × 1h30min) consolidadas por turma/observação</p>
+                    </div>
+                    <span class="bg-[#004B93] text-white text-[11px] font-bold px-2.5 py-1 rounded-lg self-start">
+                        1h30 / Ciclo
+                    </span>
+                </div>
+                <div class="relative flex-1 min-h-[260px] w-full">
+                    <canvas id="hoursByClassChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABELA INTERATIVA DE TÉCNICOS COM TRILHA COMPLETA DE MÓDULOS -->
+        <section class="bg-[#111827] rounded-2xl shadow-lg border border-[#273549] overflow-hidden">
+            <div class="p-5 border-b border-[#273549] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-table-list text-[#DA291C]"></i>
+                        <span>Acompanhamento Individual por Técnico (Todos os Módulos)</span>
+                        <span id="tableCountBadge" class="bg-slate-800 text-slate-200 border border-[#273549] text-xs font-bold px-2.5 py-0.5 rounded-full">0 registros</span>
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Cada técnico possui campos independentes para todos os 8 módulos; editar um módulo preserva os anteriores e registra a última atualização.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="openFormModal()" class="bg-[#DA291C] hover:bg-[#A61910] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-plus"></i> Novo Técnico
+                    </button>
+                    <button type="button" onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-download"></i> Exportar CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-[#0B1120] border-b border-[#273549] text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            <th class="py-3.5 px-4">Turma / Obs.</th>
+                            <th class="py-3.5 px-4">Técnico / Matrícula</th>
+                            <th class="py-3.5 px-4 min-w-[280px]">Módulos (EAD, M01–M05 HFC, GPON, Prática)</th>
+                            <th class="py-3.5 px-4">Último Módulo Atualizado</th>
+                            <th class="py-3.5 px-3 text-center">Concluídos</th>
+                            <th class="py-3.5 px-3 text-center">Ciclos / Horas</th>
+                            <th class="py-3.5 px-3 text-center">Sábado Dupla</th>
+                            <th class="py-3.5 px-4 text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordsTableBody" class="divide-y divide-[#1E293B] text-sm"></tbody>
+                </table>
+            </div>
+
+            <!-- Estado Vazio (Base Zerada) -->
+            <div id="emptyState" class="py-14 px-4 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-red-500/10 text-[#DA291C] flex items-center justify-center mx-auto mb-3 text-2xl border border-red-500/20">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                </div>
+                <h4 class="text-base font-bold text-white">Base de Treinamento Zerada</h4>
+                <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto">
+                    Nenhum técnico cadastrado no momento. Clique em <strong>"+ Novo Técnico"</strong> para preencher os módulos individuais ou importe uma planilha <strong>.csv</strong>.
+                </p>
+                <div class="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+                    <button type="button" onclick="openFormModal()" class="px-4 py-2.5 rounded-xl bg-[#DA291C] hover:bg-[#A61910] text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-user-plus"></i> + Novo Técnico
+                    </button>
+                    <button type="button" onclick="exportTemplateCSV()" class="px-4 py-2.5 rounded-xl bg-[#004B93] hover:bg-[#003366] text-white text-xs font-semibold shadow-sm transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-file-arrow-down"></i> Baixar Modelo CSV
+                    </button>
+                    <button type="button" onclick="clearFilters()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-[#273549] text-xs font-semibold transition cursor-pointer">
+                        Limpar Filtros
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ COM BRANDING CLARO E FIBERHOME -->
+    <footer class="bg-[#111827] border-t border-[#273549] mt-8">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <div class="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+                <strong class="text-slate-200">Cronograma de Treinamento - 28 Dias</strong>
+                <span class="hidden sm:inline">•</span>
+                <span>Segunda a sexta em sala • Sábados: saída em dupla com técnico experiente</span>
+            </div>
+            <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-slate-200">
+                <span class="font-extrabold text-[#DA291C] text-sm tracking-tight">Claro</span>
+                <span class="text-slate-300">|</span>
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 25C10 13 21 7 33 5C25 11 16 18 11 27L3 25Z" fill="#004B93"/>
+                        <path d="M12 28C18 19 25 14 34 12C27 17 21 23 18 29L12 28Z" fill="#F37021"/>
+                    </svg>
+                    <span class="font-extrabold italic tracking-tight text-sm text-[#004B93]">FiberHome</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL DE CADASTRO / EDIÇÃO DE TÉCNICO COM CAMPOS INDIVIDUAIS PARA TODOS OS MÓDULOS -->
+    <div id="formModal" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="bg-[#111827] rounded-2xl shadow-2xl max-w-4xl w-full my-auto overflow-hidden border border-[#273549] animate-fadeIn text-slate-100">
+            <div class="bg-gradient-to-r from-[#8F1109] via-[#DA291C] to-[#1E293B] text-white px-6 py-4 flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-black/30 flex items-center justify-center font-bold border border-white/15">
+                        <i class="fa-solid fa-user-pen"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalFormTitle" class="text-lg font-bold">Cadastrar Técnico — Trilha Completa de Módulos</h3>
+                        <p class="text-xs text-red-100">Cada módulo possui campo próprio e data de atualização sem apagar os demais módulos</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeFormModal()" class="text-white/80 hover:text-white p-2 rounded-lg transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="techForm" onsubmit="saveRecord(event)" class="p-6 space-y-5 max-h-[84vh] overflow-y-auto">
+                <input type="hidden" id="recordId">
+
+                <!-- Dados Básicos do Técnico -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label for="fieldTurma" class="block text-xs font-bold text-slate-300 mb-1">Turma / Observação *</label>
+                        <input type="text" id="fieldTurma" required list="turmasDatalist" placeholder="Ex: Turma 01 - Manhã" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-[#DA291C] focus:outline-none">
+                        <datalist id="turmasDatalist"></datalist>
+                    </div>
+
+                    <div>
+                        <label for="fieldMatricula" class="block text-xs font-bold text-slate-300 mb-1">Matrícula / ID *</label>
+                        <input type="text" id="fieldMatricula" required placeholder="Ex: MAT-1024" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-[#DA291C] focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label for="fieldNome" class="block text-xs font-bold text-slate-300 mb-1">Nome do Técnico *</label>
+                        <input type="text" id="fieldNome" required placeholder="Ex: João da Silva" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-[#DA291C] focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Campos Individuais para Todos os Módulos e Etapas -->
+                <div class="bg-[#0B1120] border border-[#273549] rounded-2xl p-4 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#273549]">
+                        <div>
+                            <h4 class="text-xs font-extrabold uppercase tracking-wider text-white">
+                                <i class="fa-solid fa-list-check text-[#DA291C] mr-1"></i> Módulos e Etapas do Cronograma (Campos Individuais)
+                            </h4>
+                            <p class="text-[11px] text-slate-400">Todos os módulos ficam salvos no mesmo registro. Alterar um módulo não apaga o status dos outros.</p>
+                        </div>
+                        <button type="button" onclick="markAllModulesApproved()" class="text-xs font-bold text-teal-400 hover:text-teal-300 self-start sm:self-center cursor-pointer">
+                            Marcar todos como Aprovado
+                        </button>
+                    </div>
+
+                    <div id="individualModulesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1"></div>
+                </div>
+
+                <!-- Prática (35h / 1h30) e Saída em Dupla -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label for="fieldCiclos" class="block text-xs font-bold text-slate-300 mb-1">Ciclos Práticos (1h30min cada) *</label>
+                        <input type="number" id="fieldCiclos" min="0" max="100" step="1" required value="0" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm font-bold text-amber-400 focus:border-amber-400 focus:outline-none">
+                        <span class="text-[11px] text-slate-400">Cada ciclo equivale a 1,5h (90 min)</span>
+                    </div>
+
+                    <div>
+                        <label for="fieldSabado" class="block text-xs font-bold text-slate-300 mb-1">Saída em Dupla (Sábados)</label>
+                        <select id="fieldSabado" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm font-medium text-white focus:border-[#DA291C] focus:outline-none">
+                            <option value="Pendente">Pendente</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                            <option value="Concluída">Concluída</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="fieldUltimoModuloManual" class="block text-xs font-bold text-slate-300 mb-1">Último Módulo Atualizado</label>
+                        <select id="fieldUltimoModuloManual" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3 py-2 text-sm font-medium text-white focus:border-[#DA291C] focus:outline-none">
+                            <option value="">Detectar automaticamente</option>
+                        </select>
+                        <span class="text-[11px] text-slate-400">Detecta o último módulo alterado/concluído</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-[#273549] pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeFormModal()" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-[#273549] transition cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-[#DA291C] hover:bg-[#A61910] shadow-md transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Salvar Todos os Módulos</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE SEGURANÇA DO BOTÃO ZERAR (CÓDIGO OBRIGATÓRIO: Gemini007) -->
+    <div id="resetSecurityModal" class="fixed inset-0 bg-black/80 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#111827] rounded-2xl shadow-2xl max-w-md w-full p-6 border border-[#273549] animate-fadeIn text-slate-100">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-11 h-11 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center shrink-0 text-lg border border-red-500/25">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">Zerar Base de Treinamento</h3>
+                    <p class="text-xs text-slate-400">Ação irreversível • Código de segurança obrigatório</p>
+                </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-3">
+                Todos os registros de técnicos e indicadores serão apagados e a base voltará a ficar <strong>100% zerada</strong>. Digite o código de segurança para confirmar:
+            </p>
+
+            <div class="mb-4">
+                <button type="button" onclick="exportToCSV()" class="w-full py-2 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer">
+                    <i class="fa-solid fa-file-csv"></i>
+                    <span>Baixar backup em CSV antes de zerar</span>
+                </button>
+            </div>
+
+            <form onsubmit="confirmResetWithCode(event)" class="space-y-4">
+                <div>
+                    <label for="resetCodeInput" class="block text-xs font-bold uppercase text-slate-300 mb-1">
+                        Código de Segurança
+                    </label>
+                    <input type="password" id="resetCodeInput" required autocomplete="off" placeholder="Digite o código de confirmação" class="w-full rounded-xl border border-[#273549] bg-[#0B1120] px-3.5 py-2.5 text-sm font-bold tracking-wider text-white placeholder-slate-500 focus:border-[#DA291C] focus:outline-none">
+                    <p id="resetCodeError" class="hidden text-xs font-semibold text-red-400 mt-1.5">
+                        <i class="fa-solid fa-circle-xmark mr-1"></i> Código inválido. A base não foi zerada.
+                    </p>
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-2">
+                    <button type="button" onclick="closeResetSecurityModal()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-[#273549] transition cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#DA291C] hover:bg-[#A61910] transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Confirmar e Zerar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO INDIVIDUAL -->
+    <div id="deleteConfirmModal" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#111827] rounded-2xl shadow-2xl max-w-md w-full p-6 border border-[#273549] animate-fadeIn text-slate-100">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center shrink-0 border border-red-500/25">
+                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Excluir Técnico</h3>
+            </div>
+            <p id="deleteConfirmText" class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">Deseja excluir este registro?</p>
+            <div class="flex justify-end gap-2.5">
+                <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-[#273549] transition cursor-pointer">
+                    Cancelar
+                </button>
+                <button type="button" id="confirmDeleteBtn" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#DA291C] hover:bg-[#A61910] transition cursor-pointer">
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // ARQUITETURA COMPARTILHADA (FIREBASE / FIRESTORE + FALLBACK LOCAL)
+        // Cole abaixo as credenciais do seu projeto Firebase para sincronizar entre 3 usuários.
+        // Enquanto apiKey estiver vazia, o app salva automaticamente no localStorage.
+        // =========================================================================
+        const FIREBASE_CONFIG = {
+            apiKey: "",
+            authDomain: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
+        const FIRESTORE_COLLECTION = "treinamento_28d_hfc_gpon_tecnicos";
+
+        // =========================================================================
+        // CONSTANTES E ESTADO INICIAL (BASE 100% ZERADA)
+        // =========================================================================
+        const STORAGE_KEY = 'claro_fiberhome_28d_modulos_v2';
+        const RESET_SECURITY_CODE = 'Gemini007';
+        const CYCLE_DURATION_HOURS = 1.5; // 1h30min = 90 minutos por ciclo prático
+        const DAILY_PRACTICAL_HOURS = 5.0; // 35h em 7 dias úteis = 5h/dia
+        const DEFAULT_PRACTICAL_HOURS = 35.0;
+
+        const MODULE_STATUS_OPTIONS = [
+            'Não Iniciado',
+            'Em Andamento',
+            'Aprovado',
+            'Refazer'
+        ];
+
+        // 8 Módulos / Etapas Oficiais do Cronograma de 28 Dias (Claro & FiberHome)
+        const MODULES_CONFIG = [
+            {
+                key: 'eadProva',
+                label: 'EAD + Prova',
+                badge: '2d',
+                color: '#38BDF8',
+                desc: 'Redes HFC, Config, App'
+            },
+            {
+                key: 'mod01Hfc',
+                label: 'Módulo 01 HFC',
+                badge: '1d',
+                color: '#F87171',
+                desc: 'App Técnico / Inst. Ext.'
+            },
+            {
+                key: 'mod02Hfc',
+                label: 'Módulo 02 HFC',
+                badge: '1d',
+                color: '#FB923C',
+                desc: 'Sinais Cabo / Modem'
+            },
+            {
+                key: 'mod03Hfc',
+                label: 'Módulo 03 HFC',
+                badge: '3d',
+                color: '#C084FC',
+                desc: 'Claro TV+ / Wi-Fi / Fixo'
+            },
+            {
+                key: 'mod04Hfc',
+                label: 'Módulo 04 HFC',
+                badge: '1d',
+                color: '#2DD4BF',
+                desc: 'Atend. / TOA / URA'
+            },
+            {
+                key: 'mod05Hfc',
+                label: 'Módulo 05 HFC',
+                badge: '1d',
+                color: '#FB7185',
+                desc: 'Tecnologia Mesh'
+            },
+            {
+                key: 'gpon',
+                label: 'GPON (M01–M03 + Prática)',
+                badge: '4d',
+                color: '#60A5FA',
+                desc: 'Fibra, Conect./Esticador'
+            },
+            {
+                key: 'pratica35h',
+                label: 'Prática Bancada / Campo',
+                badge: '7d/35h',
+                color: '#FBBF24',
+                desc: 'Cabos, EMTA, TOA/N10'
+            }
+        ];
+
+        let records = [];
+        let filteredRecords = [];
+        let pendingDeleteId = null;
+        let firestoreDb = null;
+
+        let stagesChart = null;
+        let statusChart = null;
+        let hoursChart = null;
+
+        // =========================================================================
+        // INICIALIZAÇÃO
+        // =========================================================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            buildStageCards();
+            buildFormModuleFields();
+            populateFilterModuloOptions();
+            await initStorageLayer();
+            populateTurmaOptions();
+            applyFilters();
+            updateBenchSimulator();
+
+            document.addEventListener('click', (e) => {
+                const btn = document.getElementById('exportDropdownBtn');
+                const menu = document.getElementById('exportMenu');
+                if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeFormModal();
+                    closeResetSecurityModal();
+                    closeDeleteModal();
+                }
+            });
+        });
+
+        async function initStorageLayer() {
+            const badge = document.getElementById('syncModeBadge');
+            const hasFirebaseConfig = Boolean(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId);
+
+            if (!hasFirebaseConfig) {
+                loadFromLocalStorage();
+                if (badge) {
+                    badge.innerHTML = '<i class="fa-solid fa-hard-drive mr-1"></i>LocalStorage Ativo';
+                }
+                return;
+            }
+
+            try {
+                const [{ initializeApp }, { getFirestore, collection, onSnapshot }] = await Promise.all([
+                    import('https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js'),
+                    import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js')
+                ]);
+
+                const app = initializeApp(FIREBASE_CONFIG);
+                firestoreDb = getFirestore(app);
+                const colRef = collection(firestoreDb, FIRESTORE_COLLECTION);
+
+                if (badge) {
+                    badge.className = 'bg-sky-500/20 text-sky-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-sky-400/30';
+                    badge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-1"></i>Firebase Sincronizado';
+                }
+
+                onSnapshot(colRef, (snap) => {
+                    const cloudItems = [];
+                    snap.forEach((docSnap) => {
+                        cloudItems.push(normalizeRecord({ ...docSnap.data(), id: docSnap.id }));
+                    });
+                    records = cloudItems;
+                    writeLocalStorageCache(records);
+                    populateTurmaOptions();
+                    applyFilters();
+                }, () => {
+                    loadFromLocalStorage();
+                    showToast('Sem conexão com Firestore no momento. Exibindo cache local.', 'warning');
+                });
+            } catch (err) {
+                loadFromLocalStorage();
+                showToast('Falha ao iniciar Firebase. Usando armazenamento local.', 'warning');
+            }
+        }
+
+        function buildStageCards() {
+            const container = document.getElementById('stagesQuickCards');
+            if (!container) return;
+            container.innerHTML = MODULES_CONFIG.map(mod => `
+                <button type="button" onclick="quickFilterModulo('${mod.key}')" id="stageCard_${mod.key}" class="text-left p-2.5 rounded-xl border border-[#273549] hover:border-white/30 transition bg-[#0B1120] border-t-4 cursor-pointer" style="border-top-color:${mod.color}">
+                    <div class="flex justify-between items-center text-[11px] font-bold" style="color:${mod.color}">
+                        <span class="truncate pr-1">${escapeHtml(mod.label)}</span>
+                        <span class="text-slate-950 px-1.5 py-0.5 rounded text-[10px] font-extrabold shrink-0" style="background:${mod.color}">${escapeHtml(mod.badge)}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-1 truncate">${escapeHtml(mod.desc)}</p>
+                </button>
+            `).join('');
+        }
+
+        function buildFormModuleFields() {
+            const grid = document.getElementById('individualModulesGrid');
+            const ultimoSelect = document.getElementById('fieldUltimoModuloManual');
+            if (!grid || !ultimoSelect) return;
+
+            grid.innerHTML = MODULES_CONFIG.map(mod => `
+                <div class="bg-[#111827] p-3 rounded-xl border border-[#273549] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${mod.color}"></span>
+                            <span class="text-xs font-bold text-white truncate">${escapeHtml(mod.label)}</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 block truncate pl-4">${escapeHtml(mod.badge)} • ${escapeHtml(mod.desc)}</span>
+                        <span id="modUpdatedAt_${mod.key}" class="text-[10px] text-slate-500 block pl-4 mt-0.5">Atualização: —</span>
+                    </div>
+                    <select id="modSelect_${mod.key}" data-mod-key="${mod.key}" onchange="onSingleModuleChange('${mod.key}')" class="rounded-lg border border-[#273549] bg-[#0B1120] px-2.5 py-1.5 text-xs font-bold text-slate-100 focus:border-[#DA291C] focus:outline-none shrink-0">
+                        ${MODULE_STATUS_OPTIONS.map(st => `<option value="${st}">${st}</option>`).join('')}
+                    </select>
+                </div>
+            `).join('');
+
+            ultimoSelect.innerHTML = `
+                <option value="">Detectar automaticamente</option>
+                ${MODULES_CONFIG.map(mod => `<option value="${mod.key}">${escapeHtml(mod.label)} (${escapeHtml(mod.badge)})</option>`).join('')}
+            `;
+        }
+
+        function populateFilterModuloOptions() {
+            const select = document.getElementById('filterModulo');
+            if (!select) return;
+            select.innerHTML = `
+                <option value="TODOS">Todos os Módulos</option>
+                ${MODULES_CONFIG.map(mod => `<option value="${mod.key}">${escapeHtml(mod.label)} (${escapeHtml(mod.badge)})</option>`).join('')}
+            `;
+        }
+
+        function createDefaultModulesMap() {
+            const map = {};
+            MODULES_CONFIG.forEach(mod => {
+                map[mod.key] = 'Não Iniciado';
+            });
+            return map;
+        }
+
+        function createDefaultTimestampsMap() {
+            const map = {};
+            MODULES_CONFIG.forEach(mod => {
+                map[mod.key] = '';
+            });
+            return map;
+        }
+
+        function normalizeRecord(raw) {
+            const modulos = createDefaultModulesMap();
+            const modulosAtualizadosEm = createDefaultTimestampsMap();
+
+            if (raw && typeof raw.modulos === 'object' && raw.modulos !== null) {
+                MODULES_CONFIG.forEach(mod => {
+                    const val = raw.modulos[mod.key];
+                    if (MODULE_STATUS_OPTIONS.includes(val)) {
+                        modulos[mod.key] = val;
+                    }
+                });
+            }
+
+            if (raw && typeof raw.modulosAtualizadosEm === 'object' && raw.modulosAtualizadosEm !== null) {
+                MODULES_CONFIG.forEach(mod => {
+                    if (raw.modulosAtualizadosEm[mod.key]) {
+                        modulosAtualizadosEm[mod.key] = String(raw.modulosAtualizadosEm[mod.key]);
+                    }
+                });
+            }
+
+            const ciclosPraticos = Math.max(0, parseInt(raw?.ciclosPraticos, 10) || 0);
+            return {
+                id: String(raw?.id || `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`),
+                turma: String(raw?.turma || 'Sem Turma'),
+                matricula: String(raw?.matricula || ''),
+                nome: String(raw?.nome || ''),
+                modulos,
+                modulosAtualizadosEm,
+                ultimoModuloKey: raw?.ultimoModuloKey || detectLastModuleKey(modulos, modulosAtualizadosEm),
+                ciclosPraticos,
+                horasPraticas: +(ciclosPraticos * CYCLE_DURATION_HOURS).toFixed(1),
+                sabadoDupla: raw?.sabadoDupla || 'Pendente',
+                atualizadoEm: raw?.atualizadoEm || new Date().toLocaleString('pt-BR')
+            };
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) {
+                    records = [];
+                    return;
+                }
+                const parsed = JSON.parse(raw);
+                records = Array.isArray(parsed) ? parsed.map(normalizeRecord) : [];
+            } catch (err) {
+                records = [];
+                showToast('Falha ao ler dados locais. Iniciando com base zerada.', 'warning');
+            }
+        }
+
+        function writeLocalStorageCache(data) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (err) {
+                // Ignora erro de quota caso ocorra
+            }
+        }
+
+        async function persistRecordToStore(entry) {
+            const idx = records.findIndex(r => r.id === entry.id);
+            if (idx !== -1) {
+                records[idx] = entry;
+            } else {
+                records.unshift(entry);
+            }
+            writeLocalStorageCache(records);
+
+            if (firestoreDb) {
+                try {
+                    const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js');
+                    await setDoc(doc(firestoreDb, FIRESTORE_COLLECTION, entry.id), entry);
+                } catch (err) {
+                    showToast('Salvo localmente; verifique as regras do Firestore para sincronizar.', 'warning');
+                }
+            }
+        }
+
+        async function deleteRecordFromStore(recordId) {
+            records = records.filter(r => r.id !== recordId);
+            writeLocalStorageCache(records);
+
+            if (firestoreDb) {
+                try {
+                    const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js');
+                    await deleteDoc(doc(firestoreDb, FIRESTORE_COLLECTION, recordId));
+                } catch (err) {
+                    showToast('Removido localmente; verifique permissões do Firestore.', 'warning');
+                }
+            }
+        }
+
+        async function clearAllRecordsInStore() {
+            const previousIds = records.map(r => r.id);
+            records = [];
+            writeLocalStorageCache([]);
+
+            if (firestoreDb && previousIds.length > 0) {
+                try {
+                    const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js');
+                    await Promise.all(previousIds.map(id => deleteDoc(doc(firestoreDb, FIRESTORE_COLLECTION, id))));
+                } catch (err) {
+                    showToast('Base local zerada; verifique permissões do Firestore.', 'warning');
+                }
+            }
+        }
+
+        // =========================================================================
+        // CÁLCULOS DE PROGRESSO E ÚLTIMO MÓDULO (SEM SOBRESCREVER ANTERIORES)
+        // =========================================================================
+        function detectLastModuleKey(modulos, timestamps = {}) {
+            let latestKey = null;
+            let latestTs = 0;
+
+            MODULES_CONFIG.forEach(mod => {
+                const stamp = timestamps?.[mod.key];
+                if (stamp && modulos[mod.key] !== 'Não Iniciado') {
+                    const parsed = Date.parse(stamp);
+                    if (!Number.isNaN(parsed) && parsed >= latestTs) {
+                        latestTs = parsed;
+                        latestKey = mod.key;
+                    }
+                }
+            });
+
+            if (latestKey) return latestKey;
+
+            for (let i = MODULES_CONFIG.length - 1; i >= 0; i--) {
+                const key = MODULES_CONFIG[i].key;
+                if (modulos[key] && modulos[key] !== 'Não Iniciado') {
+                    return key;
+                }
+            }
+            return null;
+        }
+
+        function getApprovedCount(rec) {
+            return MODULES_CONFIG.filter(mod => rec.modulos[mod.key] === 'Aprovado').length;
+        }
+
+        function getGeneralSituation(rec) {
+            const approved = getApprovedCount(rec);
+            if (approved === MODULES_CONFIG.length) return 'Concluído (8/8)';
+            const hasRefazer = MODULES_CONFIG.some(mod => rec.modulos[mod.key] === 'Refazer');
+            if (hasRefazer) return 'Atenção / Refazer';
+            const hasAnyActivity = MODULES_CONFIG.some(mod => rec.modulos[mod.key] !== 'Não Iniciado');
+            if (hasAnyActivity) return 'Em Andamento';
+            return 'Não Iniciado';
+        }
+
+        function getModuleLabel(key) {
+            const found = MODULES_CONFIG.find(m => m.key === key);
+            return found ? found.label : 'Nenhum módulo iniciado';
+        }
+
+        window.onSingleModuleChange = function (changedKey) {
+            const nowIso = new Date().toISOString();
+            const labelEl = document.getElementById(`modUpdatedAt_${changedKey}`);
+            if (labelEl) {
+                labelEl.dataset.iso = nowIso;
+                labelEl.textContent = `Atualizado agora (${new Date(nowIso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })})`;
+            }
+
+            const currentMap = {};
+            const currentTs = {};
+            MODULES_CONFIG.forEach(mod => {
+                const el = document.getElementById(`modSelect_${mod.key}`);
+                const tsEl = document.getElementById(`modUpdatedAt_${mod.key}`);
+                currentMap[mod.key] = el ? el.value : 'Não Iniciado';
+                if (tsEl?.dataset.iso) currentTs[mod.key] = tsEl.dataset.iso;
+            });
+
+            const ultimoSelect = document.getElementById('fieldUltimoModuloManual');
+            if (ultimoSelect && !ultimoSelect.dataset.userOverride) {
+                ultimoSelect.value = detectLastModuleKey(currentMap, currentTs) || changedKey || '';
+            }
+        };
+
+        window.markAllModulesApproved = function () {
+            const nowIso = new Date().toISOString();
+            MODULES_CONFIG.forEach(mod => {
+                const el = document.getElementById(`modSelect_${mod.key}`);
+                const tsEl = document.getElementById(`modUpdatedAt_${mod.key}`);
+                if (el) el.value = 'Aprovado';
+                if (tsEl) {
+                    tsEl.dataset.iso = nowIso;
+                    tsEl.textContent = `Atualizado agora`;
+                }
+            });
+            const ultimoSelect = document.getElementById('fieldUltimoModuloManual');
+            if (ultimoSelect) {
+                ultimoSelect.value = MODULES_CONFIG[MODULES_CONFIG.length - 1].key;
+            }
+            showToast('Todos os 8 módulos marcados como Aprovado.', 'info');
+        };
+
+        // =========================================================================
+        // CADASTRO E EDIÇÃO DE TÉCNICOS
+        // =========================================================================
+        window.openFormModal = function (recordId = null) {
+            const modal = document.getElementById('formModal');
+            const form = document.getElementById('techForm');
+            const title = document.getElementById('modalFormTitle');
+            const ultimoSelect = document.getElementById('fieldUltimoModuloManual');
+            if (!modal || !form) return;
+
+            form.reset();
+            document.getElementById('recordId').value = '';
+            ultimoSelect.dataset.userOverride = '';
+
+            if (recordId) {
+                const item = records.find(r => r.id === recordId);
+                if (item) {
+                    title.textContent = `Editar Técnico — ${item.nome}`;
+                    document.getElementById('recordId').value = item.id;
+                    document.getElementById('fieldTurma').value = item.turma;
+                    document.getElementById('fieldMatricula').value = item.matricula;
+                    document.getElementById('fieldNome').value = item.nome;
+                    document.getElementById('fieldCiclos').value = item.ciclosPraticos;
+                    document.getElementById('fieldSabado').value = item.sabadoDupla || 'Pendente';
+
+                    MODULES_CONFIG.forEach(mod => {
+                        const sel = document.getElementById(`modSelect_${mod.key}`);
+                        const tsEl = document.getElementById(`modUpdatedAt_${mod.key}`);
+                        if (sel) sel.value = item.modulos[mod.key] || 'Não Iniciado';
+                        if (tsEl) {
+                            const iso = item.modulosAtualizadosEm?.[mod.key] || '';
+                            tsEl.dataset.iso = iso;
+                            tsEl.textContent = iso
+                                ? `Atualizado: ${new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}`
+                                : 'Atualização: —';
+                        }
+                    });
+
+                    ultimoSelect.value = item.ultimoModuloKey || detectLastModuleKey(item.modulos, item.modulosAtualizadosEm) || '';
+                }
+            } else {
+                title.textContent = 'Cadastrar Técnico — Trilha Completa de Módulos';
+                document.getElementById('fieldCiclos').value = 0;
+                document.getElementById('fieldSabado').value = 'Pendente';
+                MODULES_CONFIG.forEach(mod => {
+                    const sel = document.getElementById(`modSelect_${mod.key}`);
+                    const tsEl = document.getElementById(`modUpdatedAt_${mod.key}`);
+                    if (sel) sel.value = 'Não Iniciado';
+                    if (tsEl) {
+                        tsEl.dataset.iso = '';
+                        tsEl.textContent = 'Atualização: —';
+                    }
+                });
+                ultimoSelect.value = '';
+            }
+
+            ultimoSelect.onchange = () => {
+                ultimoSelect.dataset.userOverride = ultimoSelect.value ? '1' : '';
+            };
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => document.getElementById('fieldTurma')?.focus(), 50);
+        };
+
+        window.closeFormModal = function () {
+            const modal = document.getElementById('formModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.saveRecord = async function (event) {
+            event.preventDefault();
+
+            const existingId = document.getElementById('recordId').value;
+            const turma = document.getElementById('fieldTurma').value.trim();
+            const matricula = document.getElementById('fieldMatricula').value.trim();
+            const nome = document.getElementById('fieldNome').value.trim();
+            const ciclosPraticos = Math.max(0, parseInt(document.getElementById('fieldCiclos').value, 10) || 0);
+            const sabadoDupla = document.getElementById('fieldSabado').value;
+            const ultimoManual = document.getElementById('fieldUltimoModuloManual').value;
+
+            if (!turma || !matricula || !nome) {
+                showToast('Preencha Turma/Observação, Matrícula e Nome do Técnico.', 'warning');
+                return;
+            }
+
+            const existingItem = existingId ? records.find(r => r.id === existingId) : null;
+            const modulos = existingItem ? { ...existingItem.modulos } : createDefaultModulesMap();
+            const modulosAtualizadosEm = existingItem
+                ? { ...(existingItem.modulosAtualizadosEm || createDefaultTimestampsMap()) }
+                : createDefaultTimestampsMap();
+
+            const nowIso = new Date().toISOString();
+
+            // Preserva todos os módulos existentes e atualiza apenas os que mudaram ou foram salvos
+            MODULES_CONFIG.forEach(mod => {
+                const el = document.getElementById(`modSelect_${mod.key}`);
+                const tsEl = document.getElementById(`modUpdatedAt_${mod.key}`);
+                if (el && MODULE_STATUS_OPTIONS.includes(el.value)) {
+                    const prevVal = existingItem ? existingItem.modulos[mod.key] : 'Não Iniciado';
+                    modulos[mod.key] = el.value;
+                    if (tsEl?.dataset.iso) {
+                        modulosAtualizadosEm[mod.key] = tsEl.dataset.iso;
+                    } else if (el.value !== prevVal && el.value !== 'Não Iniciado') {
+                        modulosAtualizadosEm[mod.key] = nowIso;
+                    }
+                }
+            });
+
+            const ultimoModuloKey = ultimoManual || detectLastModuleKey(modulos, modulosAtualizadosEm) || '';
+
+            const entry = {
+                id: existingId || `tec_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+                turma,
+                matricula,
+                nome,
+                modulos,
+                modulosAtualizadosEm,
+                ultimoModuloKey,
+                ciclosPraticos,
+                horasPraticas: +(ciclosPraticos * CYCLE_DURATION_HOURS).toFixed(1),
+                sabadoDupla,
+                atualizadoEm: new Date().toLocaleString('pt-BR')
+            };
+
+            await persistRecordToStore(entry);
+            populateTurmaOptions();
+            applyFilters();
+            closeFormModal();
+            showToast(`Registro de ${nome} salvo com todos os módulos preservados!`, 'success');
+        };
+
+        // =========================================================================
+        // EXCLUSÃO INDIVIDUAL E ZERAR BASE COM CÓDIGO Gemini007
+        // =========================================================================
+        window.openDeleteModal = function (id, nome) {
+            pendingDeleteId = id;
+            document.getElementById('deleteConfirmText').innerHTML = `Deseja remover o técnico <strong>${escapeHtml(nome)}</strong>?`;
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeDeleteModal = function () {
+            pendingDeleteId = null;
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (!pendingDeleteId) return;
+            const targetId = pendingDeleteId;
+            closeDeleteModal();
+            await deleteRecordFromStore(targetId);
+            populateTurmaOptions();
+            applyFilters();
+            showToast('Registro excluído.', 'info');
+        });
+
+        window.openResetSecurityModal = function () {
+            if (records.length === 0) {
+                showToast('A base já está 100% zerada.', 'info');
+                return;
+            }
+            const input = document.getElementById('resetCodeInput');
+            const err = document.getElementById('resetCodeError');
+            input.value = '';
+            err.classList.add('hidden');
+
+            const modal = document.getElementById('resetSecurityModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => input.focus(), 50);
+        };
+
+        window.closeResetSecurityModal = function () {
+            const modal = document.getElementById('resetSecurityModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        window.confirmResetWithCode = async function (event) {
+            event.preventDefault();
+            const typedCode = document.getElementById('resetCodeInput').value;
+            const errEl = document.getElementById('resetCodeError');
+
+            if (typedCode !== RESET_SECURITY_CODE) {
+                errEl.classList.remove('hidden');
+                document.getElementById('resetCodeInput').focus();
+                return;
+            }
+
+            closeResetSecurityModal();
+            await clearAllRecordsInStore();
+            populateTurmaOptions();
+            clearFilters();
+            showToast('Base zerada com sucesso!', 'success');
+        };
+
+        // =========================================================================
+        // FILTROS, KPIs, SIMULADOR E GRÁFICOS
+        // =========================================================================
+        function populateTurmaOptions() {
+            const select = document.getElementById('filterTurma');
+            const datalist = document.getElementById('turmasDatalist');
+            const current = select.value;
+
+            const turmas = [...new Set(records.map(r => r.turma).filter(Boolean))].sort();
+
+            select.innerHTML = '<option value="TODAS">Todas as Turmas</option>';
+            datalist.innerHTML = '';
+
+            turmas.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.textContent = t;
+                select.appendChild(opt);
+
+                const dlOpt = document.createElement('option');
+                dlOpt.value = t;
+                datalist.appendChild(dlOpt);
+            });
+
+            if (turmas.includes(current)) {
+                select.value = current;
+            }
+        }
+
+        window.quickFilterModulo = function (modKey) {
+            const select = document.getElementById('filterModulo');
+            select.value = (select.value === modKey) ? 'TODOS' : modKey;
+            applyFilters();
+        };
+
+        window.clearFilters = function () {
+            document.getElementById('filterTurma').value = 'TODAS';
+            document.getElementById('filterModulo').value = 'TODOS';
+            document.getElementById('filterStatus').value = 'TODOS';
+            document.getElementById('filterSearch').value = '';
+            applyFilters();
+        };
+
+        window.applyFilters = function () {
+            const turma = document.getElementById('filterTurma').value;
+            const modKey = document.getElementById('filterModulo').value;
+            const status = document.getElementById('filterStatus').value;
+            const busca = document.getElementById('filterSearch').value.trim().toLowerCase();
+
+            MODULES_CONFIG.forEach(m => {
+                const card = document.getElementById(`stageCard_${m.key}`);
+                if (card) {
+                    if (modKey === m.key) {
+                        card.classList.add('ring-2', 'ring-white');
+                    } else {
+                        card.classList.remove('ring-2', 'ring-white');
+                    }
+                }
+            });
+
+            filteredRecords = records.filter(r => {
+                if (turma !== 'TODAS' && r.turma !== turma) return false;
+                if (modKey !== 'TODOS' && r.modulos[modKey] === 'Não Iniciado') return false;
+                if (status !== 'TODOS' && getGeneralSituation(r) !== status) return false;
+                if (busca) {
+                    const matchNome = String(r.nome || '').toLowerCase().includes(busca);
+                    const matchMat = String(r.matricula || '').toLowerCase().includes(busca);
+                    const matchTurma = String(r.turma || '').toLowerCase().includes(busca);
+                    if (!matchNome && !matchMat && !matchTurma) return false;
+                }
+                return true;
+            });
+
+            updateKPIs();
+            renderTable();
+            renderCharts();
+        };
+
+        function updateKPIs() {
+            const total = filteredRecords.length;
+            const turmasUnicas = new Set(filteredRecords.map(r => r.turma)).size;
+            const totalModulesCount = MODULES_CONFIG.length;
+
+            document.getElementById('kpiTotalTecnicos').textContent = total;
+            document.getElementById('kpiTurmasCount').textContent = `em ${turmasUnicas} ${turmasUnicas === 1 ? 'turma' : 'turmas'}`;
+
+            let somaAprovados = 0;
+            let trilhasCompletas = 0;
+            filteredRecords.forEach(r => {
+                const app = getApprovedCount(r);
+                somaAprovados += app;
+                if (app === totalModulesCount) trilhasCompletas++;
+            });
+
+            const maxModulosPossiveis = total * totalModulesCount;
+            const pctMedio = maxModulosPossiveis > 0 ? Math.round((somaAprovados / maxModulosPossiveis) * 100) : 0;
+            const mediaModulos = total > 0 ? (somaAprovados / total).toFixed(1) : '0.0';
+            const sabadosOk = filteredRecords.filter(r => r.sabadoDupla === 'Concluída').length;
+
+            document.getElementById('kpiTrilhaCompleta').textContent = `${trilhasCompletas} trilhas 100%`;
+            document.getElementById('kpiProgressoMedio').textContent = `${pctMedio}%`;
+            document.getElementById('kpiModulosAprovadosTotal').textContent = `(${somaAprovados} aprov.)`;
+            document.getElementById('kpiProgressoBar').style.width = `${pctMedio}%`;
+            document.getElementById('kpiMediaModulos').textContent = `${mediaModulos}/${totalModulesCount}`;
+            document.getElementById('kpiSabadoCount').textContent = `Sábados dupla: ${sabadosOk}/${total}`;
+
+            const totalCiclos = filteredRecords.reduce((acc, r) => acc + Number(r.ciclosPraticos || 0), 0);
+            const totalHoras = (totalCiclos * CYCLE_DURATION_HOURS).toFixed(1);
+            const mediaCiclos = total > 0 ? (totalCiclos / total).toFixed(1) : '0.0';
+
+            document.getElementById('kpiHorasPraticas').textContent = `${totalHoras}h`;
+            document.getElementById('kpiTotalCiclos').textContent = `(${totalCiclos} ciclos de 1h30)`;
+            document.getElementById('kpiMediaCiclos').textContent = `${mediaCiclos}x / técnico`;
+        }
+
+        window.syncSimTechsWithTable = function () {
+            const simAlunosEl = document.getElementById('simAlunos');
+            if (simAlunosEl) {
+                simAlunosEl.value = filteredRecords.length;
+                updateBenchSimulator();
+                showToast(`Simulador ajustado para ${filteredRecords.length} técnico(s).`, 'info');
+            }
+        };
+
+        window.updateBenchSimulator = function () {
+            const bancadas = Math.max(1, parseInt(document.getElementById('simBancadas').value, 10) || 1);
+            const alunos = Math.max(0, parseInt(document.getElementById('simAlunos').value, 10) || 0);
+            const dias = Math.max(1, parseInt(document.getElementById('simDias').value, 10) || 7);
+
+            // Base de 35h em 7 dias equivale a 5h/dia; se dias === 7 mantém exatamente 35h
+            const janelaHoras = dias === 7 ? DEFAULT_PRACTICAL_HOURS : +(dias * DAILY_PRACTICAL_HOURS).toFixed(1);
+            const ciclosPorBancada = Math.floor(janelaHoras / CYCLE_DURATION_HOURS);
+            const totalCiclosSala = ciclosPorBancada * bancadas;
+            const horasDisponiveisSala = +(totalCiclosSala * CYCLE_DURATION_HOURS).toFixed(1);
+            const execucoesPorAluno = alunos > 0 ? (totalCiclosSala / alunos) : 0;
+            const ocupacaoPct = totalCiclosSala > 0 ? Math.min(100, Math.round((alunos / totalCiclosSala) * 100)) : 0;
+
+            document.getElementById('simHorasJanelaLabel').textContent = `Janela: ${janelaHoras.toFixed(1)}h`;
+            document.getElementById('simTotalCiclos').textContent = `${totalCiclosSala} ciclos (${horasDisponiveisSala}h)`;
+            document.getElementById('simOcupacaoBadge').textContent = alunos > 0 ? `${ocupacaoPct}% de relação aluno/ciclo` : '0% (sem técnicos)';
+            document.getElementById('simResultadoAluno').textContent = `${execucoesPorAluno.toFixed(1)}x`;
+            document.getElementById('kpiSimAluno').textContent = `${execucoesPorAluno.toFixed(1)}x`;
+
+            const alertaEl = document.getElementById('simAlertaTexto');
+            const kpiResumoEl = document.getElementById('kpiSimResumo');
+
+            if (alunos === 0) {
+                alertaEl.textContent = 'Informe a quantidade de técnicos para calcular';
+                alertaEl.className = 'text-xs text-slate-400 font-medium mt-0.5';
+                kpiResumoEl.textContent = `${bancadas} bancada(s) • ${dias}d (${janelaHoras.toFixed(0)}h)`;
+            } else if (execucoesPorAluno < 1.0) {
+                alertaEl.textContent = 'Gargalo: menos de 1 ciclo completo por técnico na janela';
+                alertaEl.className = 'text-xs text-red-400 font-semibold mt-0.5';
+                kpiResumoEl.textContent = `${alunos} téc. / ${bancadas} banc. • Gargalo (<1.0x)`;
+            } else if (execucoesPorAluno < 2.0) {
+                alertaEl.textContent = 'Capacidade para ~1 prática completa por técnico no período';
+                alertaEl.className = 'text-xs text-amber-300 font-semibold mt-0.5';
+                kpiResumoEl.textContent = `${alunos} téc. / ${bancadas} banc. • ~1.0x por técnico`;
+            } else {
+                alertaEl.textContent = 'Folga de bancada: 2 ou mais ciclos completos por técnico';
+                alertaEl.className = 'text-xs text-emerald-400 font-semibold mt-0.5';
+                kpiResumoEl.textContent = `${alunos} téc. / ${bancadas} banc. • ${execucoesPorAluno.toFixed(1)}x por técnico`;
+            }
+        };
+
+        // =========================================================================
+        // RENDERIZAÇÃO DA TABELA COM TODOS OS MÓDULOS DO TÉCNICO
+        // =========================================================================
+        function renderTable() {
+            const tbody = document.getElementById('recordsTableBody');
+            const emptyState = document.getElementById('emptyState');
+            const badge = document.getElementById('tableCountBadge');
+
+            badge.textContent = `${filteredRecords.length} ${filteredRecords.length === 1 ? 'registro' : 'registros'}`;
+
+            if (filteredRecords.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            tbody.innerHTML = filteredRecords.map(r => {
+                const horas = (Number(r.ciclosPraticos || 0) * CYCLE_DURATION_HOURS).toFixed(1);
+                const approved = getApprovedCount(r);
+                const pct = Math.round((approved / MODULES_CONFIG.length) * 100);
+                const lastKey = r.ultimoModuloKey || detectLastModuleKey(r.modulos, r.modulosAtualizadosEm);
+                const lastLabel = lastKey ? getModuleLabel(lastKey) : 'Nenhum iniciado';
+                const lastStatus = lastKey ? r.modulos[lastKey] : 'Não Iniciado';
+
+                const pillsHtml = MODULES_CONFIG.map(mod => {
+                    const st = r.modulos[mod.key] || 'Não Iniciado';
+                    let pillClass = 'bg-slate-800 text-slate-400 border-slate-700';
+                    let icon = 'fa-minus';
+                    if (st === 'Aprovado') {
+                        pillClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+                        icon = 'fa-check';
+                    } else if (st === 'Em Andamento') {
+                        pillClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                        icon = 'fa-clock';
+                    } else if (st === 'Refazer') {
+                        pillClass = 'bg-red-500/20 text-red-300 border-red-500/40';
+                        icon = 'fa-rotate-left';
+                    }
+                    return `
+                        <span title="${escapeHtml(mod.label)}: ${escapeHtml(st)}" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${pillClass}">
+                            <i class="fa-solid ${icon} text-[9px]"></i>
+                            <span>${escapeHtml(mod.label.replace('Módulo ', 'M'))}</span>
+                        </span>
+                    `;
+                }).join('');
+
+                return `
+                    <tr class="hover:bg-slate-800/50 transition align-top">
+                        <td class="py-3.5 px-4">
+                            <span class="px-2.5 py-1 rounded-lg bg-sky-500/15 text-sky-300 border border-sky-500/30 text-xs font-bold">${escapeHtml(r.turma)}</span>
+                        </td>
+                        <td class="py-3.5 px-4">
+                            <div class="font-bold text-white">${escapeHtml(r.nome)}</div>
+                            <div class="text-[11px] text-slate-400 font-medium">${escapeHtml(r.matricula)}</div>
+                        </td>
+                        <td class="py-3.5 px-4">
+                            <div class="flex flex-wrap gap-1">${pillsHtml}</div>
+                        </td>
+                        <td class="py-3.5 px-4">
+                            <div class="text-xs font-bold text-slate-100">${escapeHtml(lastLabel)}</div>
+                            <span class="inline-block mt-0.5 text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">${escapeHtml(lastStatus)}</span>
+                        </td>
+                        <td class="py-3.5 px-3 text-center">
+                            <div class="text-xs font-extrabold text-white">${approved}/${MODULES_CONFIG.length} <span class="text-teal-400">(${pct}%)</span></div>
+                            <div class="w-20 mx-auto bg-slate-800 rounded-full h-1.5 mt-1 overflow-hidden">
+                                <div class="bg-teal-400 h-1.5 rounded-full" style="width:${pct}%"></div>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-3 text-center">
+                            <div class="text-xs font-bold text-amber-400">${horas}h</div>
+                            <div class="text-[10px] text-slate-400">${r.ciclosPraticos}x (1h30)</div>
+                        </td>
+                        <td class="py-3.5 px-3 text-center text-xs font-medium text-slate-300">${escapeHtml(r.sabadoDupla || 'Pendente')}</td>
+                        <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                            <button type="button" onclick="openFormModal('${r.id}')" class="p-2 rounded-lg text-slate-400 hover:text-sky-400 hover:bg-sky-500/10 transition cursor-pointer" title="Editar módulos">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" onclick="openDeleteModal('${r.id}', '${escapeHtml(r.nome).replace(/'/g, "\\'")}')" class="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition cursor-pointer" title="Excluir">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // =========================================================================
+        // GRÁFICOS CHART.JS (TEMA ESCURO EXECUTIVO)
+        // =========================================================================
+        function renderCharts() {
+            if (typeof Chart === 'undefined') return;
+
+            const approvedPerMod = MODULES_CONFIG.map(mod =>
+                filteredRecords.filter(r => r.modulos[mod.key] === 'Aprovado').length
+            );
+            const activePerMod = MODULES_CONFIG.map(mod =>
+                filteredRecords.filter(r => r.modulos[mod.key] === 'Em Andamento' || r.modulos[mod.key] === 'Refazer').length
+            );
+
+            const ctxStages = document.getElementById('stagesBarChart')?.getContext('2d');
+            if (ctxStages) {
+                if (stagesChart) stagesChart.destroy();
+                stagesChart = new Chart(ctxStages, {
+                    type: 'bar',
+                    data: {
+                        labels: MODULES_CONFIG.map(m => `${m.label} (${m.badge})`),
+                        datasets: [
+                            {
+                                label: 'Aprovado',
+                                data: approvedPerMod,
+                                backgroundColor: '#2DD4BF',
+                                borderRadius: 6,
+                                maxBarThickness: 32
+                            },
+                            {
+                                label: 'Em Andamento / Refazer',
+                                data: activePerMod,
+                                backgroundColor: '#FB923C',
+                                borderRadius: 6,
+                                maxBarThickness: 32
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top', labels: { color: '#CBD5E1', boxWidth: 12, font: { size: 11, weight: '600' } } },
+                            tooltip: { backgroundColor: '#0F172A', titleColor: '#F8FAFC', bodyColor: '#E2E8F0', padding: 10, cornerRadius: 8 }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1, color: '#94A3B8', font: { size: 11, weight: '600' } },
+                                grid: { color: '#1E293B' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#94A3B8', font: { size: 10, weight: '600' } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const sitLabels = ['Concluído (8/8)', 'Em Andamento', 'Atenção / Refazer', 'Não Iniciado'];
+            const sitValues = sitLabels.map(st =>
+                filteredRecords.filter(r => getGeneralSituation(r) === st).length
+            );
+            const sitColors = ['#2DD4BF', '#FB923C', '#F87171', '#64748B'];
+            const total = filteredRecords.length;
+
+            const ctxStatus = document.getElementById('statusDonutChart')?.getContext('2d');
+            if (ctxStatus) {
+                if (statusChart) statusChart.destroy();
+                statusChart = new Chart(ctxStatus, {
+                    type: 'doughnut',
+                    data: {
+                        labels: sitLabels,
+                        datasets: [{
+                            data: sitValues,
+                            backgroundColor: sitColors,
+                            borderColor: '#111827',
+                            borderWidth: 2,
+                            hoverOffset: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '66%',
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            const legendEl = document.getElementById('statusLegendCustom');
+            if (legendEl) {
+                legendEl.innerHTML = sitLabels.map((lbl, idx) => {
+                    const qtd = sitValues[idx];
+                    const pct = total > 0 ? Math.round((qtd / total) * 100) : 0;
+                    return `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full shrink-0" style="background:${sitColors[idx]}"></span>
+                                <span class="text-slate-300 font-medium">${lbl}</span>
+                            </div>
+                            <span class="font-bold text-white">${qtd} <span class="text-slate-500 font-normal">(${pct}%)</span></span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const hoursMap = {};
+            filteredRecords.forEach(r => {
+                const t = r.turma || 'Sem Turma';
+                const h = Number(r.ciclosPraticos || 0) * CYCLE_DURATION_HOURS;
+                hoursMap[t] = (hoursMap[t] || 0) + h;
+            });
+
+            const turmaLabels = Object.keys(hoursMap);
+            const turmaHours = turmaLabels.map(t => +hoursMap[t].toFixed(1));
+
+            const ctxHours = document.getElementById('hoursByClassChart')?.getContext('2d');
+            if (ctxHours) {
+                if (hoursChart) hoursChart.destroy();
+                hoursChart = new Chart(ctxHours, {
+                    type: 'bar',
+                    data: {
+                        labels: turmaLabels.length > 0 ? turmaLabels : ['Sem dados'],
+                        datasets: [{
+                            label: 'Horas Práticas (h)',
+                            data: turmaHours.length > 0 ? turmaHours : [0],
+                            backgroundColor: '#38BDF8',
+                            borderRadius: 8,
+                            maxBarThickness: 48
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#0F172A',
+                                callbacks: {
+                                    label: (ctx) => ` ${ctx.parsed.y.toFixed(1)} horas práticas`
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: (v) => `${v}h`,
+                                    color: '#94A3B8',
+                                    font: { size: 11, weight: '600' }
+                                },
+                                grid: { color: '#1E293B' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#94A3B8', font: { size: 11, weight: '600' } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // =========================================================================
+        // EXPORTAÇÃO (.CSV / .XLS / MODELO EM BRANCO) E IMPORTAÇÃO (.CSV)
+        // =========================================================================
+        window.toggleExportMenu = function () {
+            document.getElementById('exportMenu').classList.toggle('hidden');
+        };
+
+        function getSpreadsheetHeaders() {
+            return [
+                'Turma / Observacao',
+                'Matricula / ID',
+                'Nome do Tecnico',
+                ...MODULES_CONFIG.map(m => `${m.label} (${m.badge})`),
+                'Ultimo Modulo Atualizado',
+                'Modulos Concluidos',
+                'Ciclos Praticos (1h30)',
+                'Horas Praticas',
+                'Saida Dupla Sabado'
+            ];
+        }
+
+        window.exportToCSV = function () {
+            document.getElementById('exportMenu').classList.add('hidden');
+            const list = filteredRecords.length > 0 ? filteredRecords : records;
+            if (list.length === 0) {
+                showToast('Não há registros para exportar.', 'warning');
+                return;
+            }
+
+            const headers = getSpreadsheetHeaders();
+            const rows = list.map(r => {
+                const horas = (Number(r.ciclosPraticos || 0) * CYCLE_DURATION_HOURS).toFixed(1).replace('.', ',');
+                const approved = getApprovedCount(r);
+                const lastKey = r.ultimoModuloKey || detectLastModuleKey(r.modulos, r.modulosAtualizadosEm);
+                const lastName = lastKey ? getModuleLabel(lastKey) : 'Nenhum';
+
+                return [
+                    r.turma,
+                    r.matricula,
+                    r.nome,
+                    ...MODULES_CONFIG.map(m => r.modulos[m.key] || 'Não Iniciado'),
+                    lastName,
+                    `${approved}/${MODULES_CONFIG.length}`,
+                    r.ciclosPraticos,
+                    horas,
+                    r.sabadoDupla || 'Pendente'
+                ].map(val => `"${String(val).replace(/"/g, '""')}"`).join(';');
+            });
+
+            const csvContent = '\uFEFF' + [headers.join(';'), ...rows].join('\r\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            downloadBlob(blob, `treinamento_28d_modulos_claro_fiberhome_${todayISO()}.csv`);
+            showToast(`Planilha CSV exportada (${list.length} técnicos).`, 'success');
+        };
+
+        window.exportTemplateCSV = function () {
+            document.getElementById('exportMenu').classList.add('hidden');
+            const headers = getSpreadsheetHeaders();
+            const csvContent = '\uFEFF' + headers.join(';') + '\r\n';
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            downloadBlob(blob, 'modelo_treinamento_28d_modulos_claro_fiberhome.csv');
+            showToast('Modelo CSV com todos os módulos baixado.', 'success');
+        };
+
+        window.exportToXLS = function () {
+            document.getElementById('exportMenu').classList.add('hidden');
+            const list = filteredRecords.length > 0 ? filteredRecords : records;
+            if (list.length === 0) {
+                showToast('Não há registros para exportar.', 'warning');
+                return;
+            }
+
+            const headers = getSpreadsheetHeaders();
+            let tableHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="UTF-8"></head>
+                <body>
+                    <table border="1">
+                        <thead>
+                            <tr style="background-color:#DA291C; color:#FFFFFF; font-weight:bold;">
+                                ${headers.map(h => `<th>${escapeHtml(h)}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            list.forEach(r => {
+                const horas = (Number(r.ciclosPraticos || 0) * CYCLE_DURATION_HOURS).toFixed(1).replace('.', ',');
+                const approved = getApprovedCount(r);
+                const lastKey = r.ultimoModuloKey || detectLastModuleKey(r.modulos, r.modulosAtualizadosEm);
+                const lastName = lastKey ? getModuleLabel(lastKey) : 'Nenhum';
+
+                const modCells = MODULES_CONFIG.map(m => {
+                    const st = r.modulos[m.key] || 'Não Iniciado';
+                    const bg = st === 'Aprovado'
+                        ? '#DCFCE7'
+                        : (st === 'Em Andamento' ? '#FEF3C7' : (st === 'Refazer' ? '#FEE2E2' : '#F8FAFC'));
+                    return `<td style="background-color:${bg};">${escapeHtml(st)}</td>`;
+                }).join('');
+
+                tableHtml += `
+                    <tr>
+                        <td>${escapeHtml(r.turma)}</td>
+                        <td>${escapeHtml(r.matricula)}</td>
+                        <td>${escapeHtml(r.nome)}</td>
+                        ${modCells}
+                        <td>${escapeHtml(lastName)}</td>
+                        <td>${approved}/${MODULES_CONFIG.length}</td>
+                        <td>${r.ciclosPraticos}</td>
+                        <td>${horas}</td>
+                        <td>${escapeHtml(r.sabadoDupla || 'Pendente')}</td>
+                    </tr>
+                `;
+            });
+
+            tableHtml += '</tbody></table></body></html>';
+            const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            downloadBlob(blob, `treinamento_28d_modulos_claro_fiberhome_${todayISO()}.xls`);
+            showToast(`Planilha Excel (.xls) exportada (${list.length} técnicos).`, 'success');
+        };
+
+        window.handleCSVImport = function (event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const text = String(e.target?.result || '');
+                    const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+                    if (lines.length < 2) {
+                        showToast('CSV vazio ou sem linhas de dados.', 'warning');
+                        return;
+                    }
+
+                    const sep = lines[0].includes(';') ? ';' : ',';
+                    let importedCount = 0;
+
+                    for (let i = 1; i < lines.length; i++) {
+                        const cols = lines[i].split(sep).map(c => c.replace(/^"|"$/g, '').trim());
+                        if (cols.length < 3 || (!cols[1] && !cols[2])) continue;
+
+                        const turma = cols[0] || 'Turma Importada';
+                        const matricula = cols[1] || `MAT-${i}`;
+                        const nome = cols[2] || `Técnico ${i}`;
+
+                        const existingByMat = records.find(
+                            r => r.matricula.toLowerCase() === matricula.toLowerCase()
+                        );
+
+                        const modulos = existingByMat ? { ...existingByMat.modulos } : createDefaultModulesMap();
+                        const modulosAtualizadosEm = existingByMat
+                            ? { ...(existingByMat.modulosAtualizadosEm || createDefaultTimestampsMap()) }
+                            : createDefaultTimestampsMap();
+
+                        const nowIso = new Date().toISOString();
+                        MODULES_CONFIG.forEach((mod, idx) => {
+                            const rawStatus = cols[3 + idx];
+                            if (MODULE_STATUS_OPTIONS.includes(rawStatus)) {
+                                if (modulos[mod.key] !== rawStatus && rawStatus !== 'Não Iniciado') {
+                                    modulosAtualizadosEm[mod.key] = nowIso;
+                                }
+                                modulos[mod.key] = rawStatus;
+                            }
+                        });
+
+                        const ciclosIdx = 3 + MODULES_CONFIG.length + 2;
+                        const sabadoIdx = 3 + MODULES_CONFIG.length + 4;
+                        const ciclos = cols[ciclosIdx] !== undefined && cols[ciclosIdx] !== ''
+                            ? Math.max(0, parseInt(cols[ciclosIdx], 10) || 0)
+                            : (existingByMat ? existingByMat.ciclosPraticos : 0);
+                        const sabado = cols[sabadoIdx] || (existingByMat ? existingByMat.sabadoDupla : 'Pendente');
+
+                        const entry = normalizeRecord({
+                            id: existingByMat ? existingByMat.id : `imp_${Date.now()}_${i}`,
+                            turma,
+                            matricula,
+                            nome,
+                            modulos,
+                            modulosAtualizadosEm,
+                            ultimoModuloKey: detectLastModuleKey(modulos, modulosAtualizadosEm),
+                            ciclosPraticos: ciclos,
+                            sabadoDupla: sabado
+                        });
+
+                        await persistRecordToStore(entry);
+                        importedCount++;
+                    }
+
+                    if (importedCount > 0) {
+                        populateTurmaOptions();
+                        applyFilters();
+                        showToast(`${importedCount} registro(s) importados/atualizados!`, 'success');
+                    } else {
+                        showToast('Nenhuma linha válida encontrada no CSV.', 'warning');
+                    }
+                } catch (err) {
+                    showToast('Erro ao importar arquivo CSV.', 'error');
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file, 'UTF-8');
+        };
+
+        // =========================================================================
+        // UTILITÁRIOS
+        // =========================================================================
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function todayISO() {
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = String(str ?? '');
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const styles = {
+                success: 'bg-emerald-600 text-white border-emerald-500',
+                warning: 'bg-amber-500 text-slate-950 border-amber-400',
+                error: 'bg-[#DA291C] text-white border-red-500',
+                info: 'bg-slate-800 text-white border-slate-600'
+            };
+
+            const icons = {
+                success: 'fa-circle-check',
+                warning: 'fa-triangle-exclamation',
+                error: 'fa-circle-xmark',
+                info: 'fa-circle-info'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-xl border text-xs sm:text-sm font-semibold transition-all transform translate-y-2 opacity-0 ${styles[type] || styles.info}`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-base"></i><span>${escapeHtml(message)}</span>`;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('translate-y-2', 'opacity-0'));
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
